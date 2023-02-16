@@ -10,7 +10,7 @@ export default function Databases() {
       image: '/images/mysql-logo.png',
       description:
         'Relational database management system (RDBMS) developed by Oracle that is based on structured query language (SQL).',
-      route: '/',
+      route: '/mysql',
     },
     {
       label: 'PostgreSQL',
