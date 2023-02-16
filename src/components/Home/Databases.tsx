@@ -49,7 +49,7 @@ export default function Databases() {
 
                 <div className="w-4/5 pt-2">
                   <div className="flex item-center gap-2">
-                    <h4 className="font-semibold text-dark">{item.label}</h4>
+                    <p className="font-semibold text-dark">{item.label}</p>
                     <p>
                       <BiLinkExternal size="0.6rem" />
                     </p>
