@@ -3,7 +3,7 @@ import React from 'react'
 export default function Hero() {
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      <div className="pt-[120px]">
+      <div className="py-[130px]">
         <h1 className="text-5xl text-center text-dark font-black">
           DATABASE TRANSFER
         </h1>
