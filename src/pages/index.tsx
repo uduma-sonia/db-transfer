@@ -1,9 +1,16 @@
+import dynamic from 'next/dynamic'
+import Head from 'next/head'
+const HomeView = dynamic(() => import('@containers/Home'))
+
 export default function Home() {
   return (
     <>
-      <div className="flex items-center justify-center h-screen">
-        <p>DATABASE TRANSFER</p>
-      </div>
+      <Head>
+        <title>DB Transfer</title>
+        <meta name="title" content="DB Transfer" />
+        <meta name="description" content="DB Transfer" />
+      </Head>
+      <HomeView />
     </>
-  );
+  )
 }

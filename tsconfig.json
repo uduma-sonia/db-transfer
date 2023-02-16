@@ -21,7 +21,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@containers/*": ["./containers/*"],
+      "@containers/*": ["./src/containers/*"],
       "@appTypes/*": ["../types/*"]
     }
   },
