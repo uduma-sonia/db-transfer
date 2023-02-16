@@ -1,6 +1,19 @@
 import React from 'react'
+import { scroller } from 'react-scroll'
+import { useRouter } from 'next/router'
 
 export default function Hero() {
+  const router = useRouter()
+
+  const scrollTarget = (target: string) =>
+    scroller.scrollTo(target, { smooth: true, duration: 700 })
+
+  const scrollToPage = async (target: string) => {
+    if (router.pathname !== '/') {
+      await router.push('/')
+    }
+    scrollTarget(target)
+  }
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
       <div className="py-[100px] lg:py-[150px]">
@@ -15,7 +28,10 @@ export default function Hero() {
         </p>
 
         <div className="text-center mt-10">
-          <button className="bg-primary hover:bg-[#7e46b3e0] text-white rounded-lg w-48 2xl:w-56 py-4 2xl:py-5 shadow-lg">
+          <button
+            className="bg-primary hover:bg-[#7e46b3e0] text-white rounded-lg w-48 2xl:w-56 py-4 2xl:py-5 shadow-lg"
+            onClick={() => scrollToPage('relational_db')}
+          >
             Get Started
           </button>
         </div>

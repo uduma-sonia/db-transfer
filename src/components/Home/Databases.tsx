@@ -23,7 +23,7 @@ export default function Databases() {
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      <h2 className="text-2xl text-dark font-semibold">
+      <h2 className="text-2xl text-dark font-semibold" id="relational_db">
         Relational Database Management Systems
       </h2>
 
@@ -32,7 +32,7 @@ export default function Databases() {
           return (
             <Link
               key={item.label}
-              className="hover:bg-slate-200  p-3 rounded-2xl"
+              className="hover:bg-slate-200 group p-3 rounded-2xl"
               href={item.route}
               passHref
             >
@@ -50,11 +50,11 @@ export default function Databases() {
                 <div className="w-4/5 pt-2">
                   <div className="flex item-center gap-2">
                     <p className="font-semibold text-dark">{item.label}</p>
-                    <p>
-                      <BiLinkExternal size="0.6rem" />
+                    <p className="group-hover:text-xl text-xs transition-all duration-500 text-slate-500">
+                      <BiLinkExternal />
                     </p>
                   </div>
-                  <p className="text-sm text-slate-600 mt-1">
+                  <p className="text-sm text-slate-600 mt-2">
                     {item.description}
                   </p>
                 </div>
