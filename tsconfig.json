@@ -23,6 +23,7 @@
       "@/*": ["./src/*"],
       "@containers/*": ["./src/containers/*"],
       "@components/*": ["./src/components/*"],
+      "@lib/*": ["./src/lib/*"],
       "@appTypes/*": ["../types/*"]
     }
   },

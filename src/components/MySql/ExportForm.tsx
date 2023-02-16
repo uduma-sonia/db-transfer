@@ -16,7 +16,7 @@ const schema = z.object({
 
 type ImportFormSchema = z.infer<typeof schema>
 
-export default function ImportForm() {
+export default function ExportForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
@@ -30,7 +30,7 @@ export default function ImportForm() {
   const onSubmit = useCallback(async (data: ImportFormSchema) => {
     try {
       setIsSubmitting(true)
-      const result = await databaseApi.importMySql(data)
+      const result = await databaseApi.exportMySql(data)
 
       if (result) {
         toast('Import successful', {
@@ -57,11 +57,11 @@ export default function ImportForm() {
   }, [])
 
   return (
-    <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
+    <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20 mt-20">
       <Toaster />
       <div className="mt-10">
         <h2 className="text-dark text-xl font-semibold">
-          Import MySQL Database
+          Export to New MySQL Database
         </h2>
         <p className="text-sm text-dark mt-2 max-w-[400px]">
           Bacon ipsum dolor amet fatback rump boudin hamburger t-bone salami
@@ -76,7 +76,7 @@ export default function ImportForm() {
         <div className="flex flex-col">
           <label
             className="text-sm text-dark font-medium mb-2 pl-2"
-            htmlFor="user"
+            htmlFor="_user"
           >
             User
             {errors && errors?.user && (
@@ -86,17 +86,17 @@ export default function ImportForm() {
 
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
-            id="user"
+            id="_user"
+            {...register('user')}
             placeholder="User"
             type="text"
-            {...register('user')}
           />
         </div>
 
         <div className="flex flex-col pt-5">
           <label
             className="text-sm text-dark font-medium mb-2 pl-2"
-            htmlFor="hostname"
+            htmlFor="_hostname"
           >
             Host name
             {errors && errors?.hostname && (
@@ -105,7 +105,7 @@ export default function ImportForm() {
           </label>
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
-            id="hostname"
+            id="_hostname"
             placeholder="Host name"
             type="text"
             {...register('hostname')}
@@ -115,7 +115,7 @@ export default function ImportForm() {
         <div className="flex flex-col pt-5">
           <label
             className="text-sm text-dark font-medium mb-2 pl-2"
-            htmlFor="port"
+            htmlFor="_port"
           >
             Port
             {errors && errors?.port && (
@@ -124,7 +124,7 @@ export default function ImportForm() {
           </label>
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
-            id="port"
+            id="_port"
             placeholder="Port"
             type="text"
             {...register('port')}
@@ -134,7 +134,7 @@ export default function ImportForm() {
         <div className="flex flex-col pt-5">
           <label
             className="text-sm text-dark font-medium mb-2 pl-2"
-            htmlFor="database"
+            htmlFor="_database"
           >
             Database
             {errors && errors?.database && (
@@ -143,7 +143,7 @@ export default function ImportForm() {
           </label>
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
-            id="database"
+            id="_database"
             placeholder="Database"
             type="text"
             {...register('database')}
@@ -153,7 +153,7 @@ export default function ImportForm() {
         <div className="flex flex-col pt-5">
           <label
             className="text-sm text-dark font-medium mb-2 pl-2"
-            htmlFor="id"
+            htmlFor="_id"
           >
             ID
             {errors && errors?.id && (
@@ -162,7 +162,7 @@ export default function ImportForm() {
           </label>
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
-            id="id"
+            id="_id"
             placeholder="ID"
             type="text"
             {...register('id')}
@@ -172,7 +172,7 @@ export default function ImportForm() {
         <div className="flex flex-col pt-5">
           <label
             className="text-sm text-dark font-medium mb-2 pl-2"
-            htmlFor="password"
+            htmlFor="_password"
           >
             Password
             {errors && errors?.password && (
@@ -181,7 +181,7 @@ export default function ImportForm() {
           </label>
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
-            id="password"
+            id="_password"
             placeholder="* * * * * * *"
             type="password"
             {...register('password')}
@@ -192,7 +192,7 @@ export default function ImportForm() {
           type="submit"
           className="mt-10 bg-primary hover:bg-[#7e46b3e0] text-white rounded-lg w-full py-4 2xl:py-5 shadow-lg"
         >
-          {isSubmitting ? 'Importing...' : 'Import'}
+          {isSubmitting ? 'Exporting...' : 'Export'}
         </button>
       </form>
     </div>

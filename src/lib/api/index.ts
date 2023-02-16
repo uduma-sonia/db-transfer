@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import userService from './user'
+import databaseService from './database'
 
 const API_ENDPOINT = process.env.NEXT_PUBLIC_API_URL
 const isBrowser = typeof window !== undefined
@@ -37,4 +37,4 @@ const addTokenToRequest = async (request: any) => {
 
 api.interceptors.request.use(addTokenToRequest)
 
-// export const userApi = userService({ api })
+export const databaseApi = databaseService({ api })
