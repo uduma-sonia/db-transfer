@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 const [Navbar, DropDown, ImportForm, ExportForm, Footer] = [
   dynamic(() => import('../Layout/Navbar')),
-  dynamic(() => import('@components/PostgreSql/DropDown')),
+  dynamic(() => import('@/reuseables/dropdown/DropDown')),
   dynamic(() => import('@components/PostgreSql/ImportForm')),
   dynamic(() => import('@components/PostgreSql/ExportForm')),
   dynamic(() => import('@containers/Layout/Footer')),
