@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/psql-api'
+import { databaseApi } from '@/lib/api'
 import toast, { Toaster } from 'react-hot-toast'
 
 const schema = z.object({
