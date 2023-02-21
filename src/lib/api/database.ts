@@ -1,7 +1,7 @@
 import { ReqConfig, Service } from 'types/api'
 
 function databaseService({ api }: Service) {
-  type ImportMySql = {
+  type DBDataFormat = {
     user: string
     password: string
     hostname: string
@@ -9,15 +9,29 @@ function databaseService({ api }: Service) {
     database: string
     id: string
   }
-  const importMySql = async (data: ImportMySql, reqConfig?: ReqConfig) => {
+  const importMySql = async (data: DBDataFormat, reqConfig?: ReqConfig) => {
     const result = api.post(`/mysql-import`, data, {
       ...reqConfig,
     })
     return result
   }
 
-  const exportMySql = async (data: ImportMySql, reqConfig?: ReqConfig) => {
+  const exportMySql = async (data: DBDataFormat, reqConfig?: ReqConfig) => {
     const result = api.post(`/mysql-export`, data, {
+      ...reqConfig,
+    })
+    return result
+  }
+
+  const importPSql = async (data: DBDataFormat, reqConfig?: ReqConfig) => {
+    const result = api.post(`/psql-import`, data, {
+      ...reqConfig,
+    })
+    return result
+  }
+
+  const exportPSql = async (data: DBDataFormat, reqConfig?: ReqConfig) => {
+    const result = api.post(`/psql-export`, data, {
       ...reqConfig,
     })
     return result
@@ -26,6 +40,8 @@ function databaseService({ api }: Service) {
   return Object.freeze({
     importMySql,
     exportMySql,
+    importPSql,
+    exportPSql,
   })
 }
 
