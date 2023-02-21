@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/api'
+import { databaseApi } from '@/lib/psql-api'
 import toast, { Toaster } from 'react-hot-toast'
 
 const schema = z.object({
@@ -30,7 +30,7 @@ export default function ExportForm() {
   const onSubmit = useCallback(async (data: ImportFormSchema) => {
     try {
       setIsSubmitting(true)
-      const result = await databaseApi.exportMySql(data)
+      const result = await databaseApi.exportPSql(data)
 
       if (result) {
         toast('Import successful', {
