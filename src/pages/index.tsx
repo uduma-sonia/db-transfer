@@ -6,9 +6,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>DB Transfer</title>
-        <meta name="title" content="DB Transfer" />
-        <meta name="description" content="DB Transfer" />
+        <title>TRF</title>
+        <meta name="title" content="TRF" />
+        <meta name="description" content="Database Transfer" />
       </Head>
       <HomeView />
     </>
