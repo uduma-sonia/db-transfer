@@ -81,8 +81,8 @@ export default function ImportForm() {
           Import MySQL Database
         </h2>
         <p className="text-sm text-dark mt-2">
-          Bacon ipsum dolor amet fatback rump boudin hamburger t-bone salami
-          chicken chislic pork belly ham meatball buffalo sausage.
+          Import existing MySQL database and transfer it to a new database by
+          filling out a form with the old database details.
         </p>
 
         <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">

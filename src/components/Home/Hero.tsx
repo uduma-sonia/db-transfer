@@ -21,10 +21,14 @@ export default function Hero() {
           DATABASE TRANSFER
         </h1>
         <p className="text-slate-800 leading-6 2xl:text-lg max-w-[700px] mx-auto text-center mt-10">
-          Bacon ipsum dolor amet fatback rump boudin hamburger t-bone salami
-          chicken chislic pork belly ham meatball buffalo sausage. Flank fatback
-          biltong ground round kielbasa tri-tip cow jerky. Boudin burgdoggen
-          tri-tip ball tip chuck porchetta beef.
+          The process of transferring your database from one platform to another
+          simplified! Whether you want to move your data to a more secure or
+          decentralized platform or simply need to transfer your database, TRF
+          makes it easy for you to seamlessly transfer your data. We use
+          advanced technologies and protocols, such as APIs, encryption, and
+          blockchain-based solutions, to ensure that your data is transferred
+          securely and efficiently. Experience the freedom of seamless data
+          transfer with TRF.
         </p>
 
         <div className="text-center mt-10">
