@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { databaseApi } from '@/lib/api'
 import toast, { Toaster } from 'react-hot-toast'
+import { useRouter } from 'next/router'
 
 const schema = z.object({
   user: z.string().min(1),
@@ -11,12 +12,12 @@ const schema = z.object({
   hostname: z.string().min(1),
   port: z.string().min(1),
   database: z.string().min(1),
-  id: z.string().min(1),
 })
 
 type ImportFormSchema = z.infer<typeof schema>
 
 export default function ImportForm() {
+  const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
@@ -27,50 +28,70 @@ export default function ImportForm() {
     resolver: zodResolver(schema),
   })
 
-  const onSubmit = useCallback(async (data: ImportFormSchema) => {
-    try {
-      setIsSubmitting(true)
-      const result = await databaseApi.importMySql(data)
+  const onSubmit = useCallback(
+    async (data: ImportFormSchema) => {
+      try {
+        setIsSubmitting(true)
 
-      if (result) {
-        toast('Import successful', {
+        const timestamp = Date.now()
+        sessionStorage.setItem('mysql_id', timestamp.toString())
+        const output = {
+          ...data,
+          id: timestamp.toString(),
+        }
+        const result = await databaseApi.importMySql(output)
+
+        if (result) {
+          toast('Import successful', {
+            duration: 40000,
+            style: {
+              border: '1px solid #15d64c',
+              color: '#15d64c',
+            },
+          })
+          console.log({ result })
+          router.push({
+            pathname: router.route,
+            query: {
+              im: true,
+            },
+          })
+        }
+      } catch (error: any) {
+        console.log(error)
+        toast('Error', {
           duration: 40000,
           style: {
-            border: '1px solid #15d64c',
-            color: '#15d64c',
+            border: '1px solid #d62515',
+            color: '#d62515',
           },
         })
-        console.log(result)
+      } finally {
+        setIsSubmitting(false)
       }
-    } catch (error: any) {
-      console.log(error)
-      toast('Error', {
-        duration: 40000,
-        style: {
-          border: '1px solid #d62515',
-          color: '#d62515',
-        },
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }, [])
+    },
+    [router]
+  )
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
       <Toaster />
-      <div className="mt-10">
+      <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Import MySQL Database
         </h2>
-        <p className="text-sm text-dark mt-2 max-w-[400px]">
+        <p className="text-sm text-dark mt-2">
           Bacon ipsum dolor amet fatback rump boudin hamburger t-bone salami
           chicken chislic pork belly ham meatball buffalo sausage.
         </p>
+
+        <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">
+          <p>mysql://root:password@localhost:port/databasename</p>
+        </div>
       </div>
 
       <form
-        className="max-w-[600px] mt-10 bg-gray-50 shadow-lg lg:px-7 py-7 "
+        className="max-w-[600px] mx-auto mt-5 bg-gray-50 shadow-lg lg:px-7 py-7"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col">
@@ -87,7 +108,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="user"
-            placeholder="User"
+            placeholder="root"
             type="text"
             {...register('user')}
           />
@@ -106,7 +127,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="hostname"
-            placeholder="Host name"
+            placeholder="localhost"
             type="text"
             {...register('hostname')}
           />
@@ -125,7 +146,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="port"
-            placeholder="Port"
+            placeholder="port"
             type="text"
             {...register('port')}
           />
@@ -144,28 +165,9 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="database"
-            placeholder="Database"
+            placeholder="database name"
             type="text"
             {...register('database')}
-          />
-        </div>
-
-        <div className="flex flex-col pt-5">
-          <label
-            className="text-sm text-dark font-medium mb-2 pl-2"
-            htmlFor="id"
-          >
-            ID
-            {errors && errors?.id && (
-              <span className="text-red-500 text-[10px]"> *</span>
-            )}
-          </label>
-          <input
-            className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
-            id="id"
-            placeholder="ID"
-            type="text"
-            {...register('id')}
           />
         </div>
 
