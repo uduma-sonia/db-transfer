@@ -67,13 +67,9 @@ export default function ExportForm() {
 
   useEffect(() => {
     const genId = sessionStorage.getItem('mysql_id') as string
-
     if (genId) {
       setGeneratedId(genId)
-      console.log('VALID')
     } else if (genId === null) {
-      console.log('NULL')
-
       router.push({
         pathname: router.route,
         query: {
