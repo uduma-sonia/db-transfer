@@ -1,5 +1,6 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 
 const [Navbar, ImportForm, ExportForm, Footer] = [
   dynamic(() => import('../Layout/Navbar')),
@@ -9,11 +10,18 @@ const [Navbar, ImportForm, ExportForm, Footer] = [
 ]
 
 export default function MySqlView() {
+  const router = useRouter()
+  const { im } = router.query
+
   return (
     <div>
       <Navbar />
-      <ImportForm />
-      <ExportForm />
+      <div className={`${im !== 'true' ? 'block' : 'hidden'}`}>
+        <ImportForm />
+      </div>
+      <div className={`${im === 'true' ? 'block' : 'hidden'}`}>
+        <ExportForm />
+      </div>
       <Footer />
     </div>
   )
