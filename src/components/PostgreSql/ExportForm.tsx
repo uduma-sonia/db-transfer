@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/api'
+import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
@@ -37,9 +37,12 @@ export default function ExportForm() {
           ...data,
           id: generatedId,
         }
-        const result = await databaseApi.exportPSql(output)
+        const res = await axios.post(
+          'http://138.68.72.216:5500/psql-export',
+          output
+        )
 
-        if (result) {
+        if (res.status === 200) {
           toast('Export successful', {
             duration: 40000,
             style: {
@@ -47,7 +50,7 @@ export default function ExportForm() {
               color: '#15d64c',
             },
           })
-          console.log(result)
+          console.log(res.data)
         }
       } catch (error: any) {
         console.log(error)
@@ -92,7 +95,7 @@ export default function ExportForm() {
         </p>
 
         <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">
-          <p>postgres://User:Password@Hostname:Port/DatabaseName</p>
+          <p>postgres://User:Password@Hostname:Port/Database</p>
         </div>
       </div>
 
@@ -171,7 +174,7 @@ export default function ExportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="_database"
-            placeholder="DatabaseName"
+            placeholder="Database"
             type="text"
             {...register('database')}
           />

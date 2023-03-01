@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/api'
+import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
@@ -39,9 +39,12 @@ export default function ImportForm() {
           ...data,
           id: timestamp.toString(),
         }
-        const result = await databaseApi.importPSql(output)
+        const res = await axios.post(
+          'http://138.68.72.216:5500/psql-import',
+          output
+        )
 
-        if (result) {
+        if (res.status === 200) {
           toast('Import successful', {
             duration: 40000,
             style: {
@@ -49,7 +52,7 @@ export default function ImportForm() {
               color: '#15d64c',
             },
           })
-          console.log({ result })
+          console.log(res.data)
           router.push({
             pathname: router.route,
             query: {
@@ -86,7 +89,7 @@ export default function ImportForm() {
         </p>
 
         <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">
-          <p>postgres://User:Password@Hostname:Port/DatabaseName</p>
+          <p>postgres://User:Password@Hostname:Port/Database</p>
         </div>
       </div>
 
@@ -165,7 +168,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="database"
-            placeholder="DatabaseName"
+            placeholder="Database"
             type="text"
             {...register('database')}
           />
