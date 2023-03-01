@@ -39,26 +39,41 @@ export default function ImportForm() {
           ...data,
           id: timestamp.toString(),
         }
-        const result = await databaseApi.importMySql(output)
 
-        if (result) {
-          toast('Import successful', {
-            duration: 40000,
-            style: {
-              border: '1px solid #15d64c',
-              color: '#15d64c',
-            },
-          })
-          console.log({ result })
-          router.push({
-            pathname: router.route,
-            query: {
-              im: true,
-            },
-          })
-        }
+        fetch('http://138.68.72.216:5500/mysql-import', {
+          body: JSON.stringify(output),
+          method: 'POST',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        })
+
+        // const result = await databaseApi.importMySql(output)
+
+        // if (result) {
+        //   toast('Import successful', {
+        //     duration: 40000,
+        //     style: {
+        //       border: '1px solid #15d64c',
+        //       color: '#15d64c',
+        //     },
+        //   })
+        //   console.log({ result })
+        //   router.push({
+        //     pathname: router.route,
+        //     query: {
+        //       im: true,
+        //     },
+        //   })
+        // }
       } catch (error: any) {
-        console.log(error)
+        console.log({ error })
         toast('Error', {
           duration: 40000,
           style: {
