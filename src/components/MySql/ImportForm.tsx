@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/api'
-import toast, { Toaster } from 'react-hot-toast'
+// import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
 const schema = z.object({
@@ -28,69 +27,61 @@ export default function ImportForm() {
     resolver: zodResolver(schema),
   })
 
-  const onSubmit = useCallback(
-    async (data: ImportFormSchema) => {
-      try {
-        setIsSubmitting(true)
+  const onSubmit = async (data: ImportFormSchema) => {
+    setIsSubmitting(true)
 
-        const timestamp = Date.now()
-        sessionStorage.setItem('mysql_id', timestamp.toString())
-        const output = {
-          ...data,
-          id: timestamp.toString(),
-        }
+    const timestamp = Date.now()
+    sessionStorage.setItem('mysql_id', timestamp.toString())
+    const output = {
+      ...data,
+      id: timestamp.toString(),
+    }
 
-        fetch('http://138.68.72.216:5500/mysql-import', {
-          body: JSON.stringify(output),
-          method: 'POST',
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json',
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        })
-
-        // const result = await databaseApi.importMySql(output)
-
-        // if (result) {
-        //   toast('Import successful', {
-        //     duration: 40000,
-        //     style: {
-        //       border: '1px solid #15d64c',
-        //       color: '#15d64c',
-        //     },
-        //   })
-        //   console.log({ result })
-        //   router.push({
-        //     pathname: router.route,
-        //     query: {
-        //       im: true,
-        //     },
-        //   })
-        // }
-      } catch (error: any) {
-        console.log({ error })
-        toast('Error', {
-          duration: 40000,
-          style: {
-            border: '1px solid #d62515',
-            color: '#d62515',
-          },
-        })
-      } finally {
+    fetch('http://138.68.72.216:5500/mysql-import', {
+      body: JSON.stringify(output),
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    })
+      .then((response) => response.json())
+      .then((data) => {
         setIsSubmitting(false)
-      }
-    },
-    [router]
-  )
+        // toast('Process complete', {
+        //   duration: 40000,
+        //   position: 'top-right',
+        //   style: {
+        //     border: '1px solid #15d64c',
+        //     color: '#15d64c',
+        //   },
+        // })
+        router.push({
+          pathname: router.route,
+          query: {
+            im: true,
+          },
+        })
+      })
+      .catch((error) => {
+        setIsSubmitting(false)
+        // toast('An error occured', {
+        //   duration: 40000,
+        //   style: {
+        //     border: '1px solid #d62515',
+        //     color: '#d62515',
+        //   },
+        // })
+      })
+  }
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      <Toaster />
+      {/* <Toaster /> */}
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Import MySQL Database

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/api'
+// import { databaseApi } from '@/lib/api'
 import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
@@ -31,38 +31,58 @@ export default function ExportForm() {
 
   const onSubmit = useCallback(
     async (data: ImportFormSchema) => {
-      try {
-        setIsSubmitting(true)
-        const output = {
-          ...data,
-          id: generatedId,
-        }
-        const result = await databaseApi.exportMySql(output)
+      setIsSubmitting(true)
 
-        if (result) {
-          toast('Import successful', {
+      const output = {
+        ...data,
+        id: generatedId,
+      }
+      // 1677701230720
+
+      fetch('http://138.68.72.216:5500/mysql-export', {
+        body: JSON.stringify(output),
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+          setIsSubmitting(false)
+
+          toast(data?.message, {
             duration: 40000,
             style: {
               border: '1px solid #15d64c',
               color: '#15d64c',
             },
           })
-          console.log(result)
-        }
-      } catch (error: any) {
-        console.log(error)
-        toast('Error', {
-          duration: 40000,
-          style: {
-            border: '1px solid #d62515',
-            color: '#d62515',
-          },
+          router.push({
+            pathname: router.route,
+            query: {
+              im: false,
+            },
+          })
         })
-      } finally {
-        setIsSubmitting(false)
-      }
+        .catch((error) => {
+          setIsSubmitting(false)
+          console.log({ error })
+          toast(error, {
+            duration: 40000,
+            style: {
+              border: '1px solid #d62515',
+              color: '#d62515',
+            },
+          })
+        })
     },
-    [generatedId]
+    [generatedId, router]
   )
 
   useEffect(() => {
