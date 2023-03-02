@@ -28,7 +28,7 @@ export default function Databases() {
       image: '/images/mysql-logo.png',
       description:
         'Migrate your MySQL database to Web3, a solidity code will be generated for you.',
-      route: '/mysql',
+      route: '/mysql/w3',
     },
     {
       label: 'PostgreSQL',
