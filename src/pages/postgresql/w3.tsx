@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
-const PSqlView = dynamic(() => import('@containers/PostgreSql/PSqlView'), {
+const PSqlView = dynamic(() => import('@containers/PostgreSql/PSqlProcess'), {
   ssr: false,
 })
 
