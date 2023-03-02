@@ -5,7 +5,7 @@ const [Navbar, ImportForm, Footer] = [
   dynamic(() => import('../Layout/Navbar')),
   dynamic(() => import('@components/PostgreSql/Process/ImportForm'), {
     loading: () => (
-      <div className="w-screen h-screen flex justify-center items-center">
+      <div className="w-full h-screen flex justify-center items-center">
         <div
           className="w-10 h-10 rounded-full animate-spin
         border-2 border-solid border-[#7e46b3] border-t-transparent"
@@ -15,7 +15,7 @@ const [Navbar, ImportForm, Footer] = [
   }),
   dynamic(() => import('../Layout/Footer'), {
     loading: () => (
-      <div className="w-screen h-screen flex justify-center items-center">
+      <div className="w-full h-screen flex justify-center items-center">
         <div
           className="w-10 h-10 rounded-full animate-spin
         border-2 border-solid border-[#7e46b3] border-t-transparent"
