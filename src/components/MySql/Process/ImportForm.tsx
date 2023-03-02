@@ -41,17 +41,17 @@ export default function ImportForm() {
       ...data,
       id: timestamp.toString(),
     }
-    fetch('http://138.68.72.216:5500/mysql-import', {
+    fetch('https://138.68.72.216:5500/mysql-import', {
       body: JSON.stringify(output),
       method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
+      // mode: 'cors',
+      // cache: 'no-cache',
+      // credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
+      // redirect: 'follow',
+      // referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())
       .then((data) => {
@@ -73,16 +73,16 @@ export default function ImportForm() {
 
     const id = sessionStorage.getItem('mysql_w3_id') as string
 
-    fetch(`http://138.68.72.216:5500/process/mysql/${id}`, {
+    fetch(`https://138.68.72.216:5500/process/mysql/${id}`, {
       method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
+      // mode: 'cors',
+      // cache: 'no-cache',
+      // credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
+      // redirect: 'follow',
+      // referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())
       .then((data) => {
