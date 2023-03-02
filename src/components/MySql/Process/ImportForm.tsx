@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import Loader from '../Common/Loader'
+import Loader from '../../Common/Loader'
+import { MdClear } from 'react-icons/md'
+import SyntaxDisplay from './SyntaxDisplay'
+import { scroller } from 'react-scroll'
 
 const schema = z.object({
   user: z.string().min(1),
@@ -17,8 +19,10 @@ const schema = z.object({
 type ImportFormSchema = z.infer<typeof schema>
 
 export default function ImportForm() {
-  const router = useRouter()
+  const [showModal, setShowModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [solidityDetails, setSolidityDetails] = useState([])
 
   const {
     register,
@@ -32,7 +36,7 @@ export default function ImportForm() {
     setIsSubmitting(true)
 
     const timestamp = Date.now()
-    sessionStorage.setItem('mysql_id', timestamp.toString())
+    sessionStorage.setItem('mysql_w3_id', timestamp.toString())
     const output = {
       ...data,
       id: timestamp.toString(),
@@ -52,13 +56,8 @@ export default function ImportForm() {
       .then((response) => response.json())
       .then((data) => {
         setIsSubmitting(false)
+        setShowModal(true)
         toast.success(data?.message)
-        router.push({
-          pathname: router.route,
-          query: {
-            im: true,
-          },
-        })
       })
       .catch(() => {
         setIsSubmitting(false)
@@ -66,15 +65,61 @@ export default function ImportForm() {
       })
   }
 
+  const generateSolidityCode = () => {
+    setIsGenerating(true)
+    setIsSubmitting(false)
+    setShowModal(false)
+
+    const id = sessionStorage.getItem('mysql_w3_id') as string
+
+    fetch(`http://138.68.72.216:5500/process/mysql/${id}`, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        toast.success('Process complete')
+        console.log(data)
+        setSolidityDetails(data)
+        setIsGenerating(false)
+        scrollToPage('syntax_display')
+      })
+      .catch(() => {
+        setIsGenerating(false)
+        toast.error('An error occured')
+      })
+  }
+
+  const scrollTarget = (target: string) =>
+    scroller.scrollTo(target, { smooth: true, duration: 700 })
+
+  const scrollToPage = async (target: string) => {
+    scrollTarget(target)
+  }
+
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
+      {isSubmitting && <Loader isImporting />}
+      {isGenerating && <Loader isGeneratingCode />}
+      <GenerateSolidityCodeModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        generateSolidityCode={generateSolidityCode}
+      />
+
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Import MySQL Database
         </h2>
         <p className="text-sm text-dark mt-2">
-          Import existing MySQL database and transfer it to a new database by
-          filling out a form with the old database details.
+          Import existing MySQL database and generate Solidity Code.
         </p>
 
         <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">
@@ -189,8 +234,50 @@ export default function ImportForm() {
           Import
         </button>
       </form>
+      {solidityDetails && <SyntaxDisplay data={solidityDetails} />}
+    </div>
+  )
+}
 
-      {isSubmitting && <Loader isImporting />}
+const GenerateSolidityCodeModal = ({
+  showModal = false,
+  setShowModal,
+  generateSolidityCode,
+}: {
+  showModal?: boolean
+  setShowModal: any
+  generateSolidityCode: () => void
+}) => {
+  return (
+    <div
+      className={`fixed w-full h-full left-0 top-0 bg-[#e9d5ff8f] ${
+        showModal ? 'flex' : 'hidden'
+      } justify-center items-center`}
+    >
+      <div className="bg-[#7e46b3] w-[250px] py-7 rounded-lg flex justify-center items-center relative">
+        <button
+          className="absolute top-2 right-3"
+          onClick={() => setShowModal(false)}
+        >
+          <MdClear color="white" size="1rem" />
+        </button>
+
+        <div className="w-full px-3 h-full text-center">
+          <p className="text-white font-medium text-lg">Import complete</p>
+          <p className="text-white text-sm font-medium mt-3">
+            Generate solidity code
+          </p>
+          <div className="mt-10">
+            <button
+              type="button"
+              className="bg-white text-black rounded-lg w-full py-3 text-sm font-semibold"
+              onClick={generateSolidityCode}
+            >
+              Generate
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

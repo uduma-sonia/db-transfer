@@ -74,48 +74,48 @@ export default function ExportForm() {
   //     id: '1677701230720',
   //   }
 
-  //   fetch('http://138.68.72.216:5500/process/mysql/1677701230720', {
-  //     // body: JSON.stringify(output),
-  //     method: 'GET',
-  //     mode: 'cors',
-  //     cache: 'no-cache',
-  //     credentials: 'same-origin',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     redirect: 'follow',
-  //     referrerPolicy: 'no-referrer',
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data)
-  //       setIsSubmitting(false)
+  // fetch('http://138.68.72.216:5500/process/mysql/1677701230720', {
+  //   // body: JSON.stringify(output),
+  //   method: 'GET',
+  //   mode: 'cors',
+  //   cache: 'no-cache',
+  //   credentials: 'same-origin',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   redirect: 'follow',
+  //   referrerPolicy: 'no-referrer',
+  // })
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     console.log(data)
+  //     setIsSubmitting(false)
 
-  //       // toast(data?.message, {
-  //       //   duration: 40000,
-  //       //   style: {
-  //       //     border: '1px solid #15d64c',
-  //       //     color: '#15d64c',
-  //       //   },
-  //       // })
-  //       router.push({
-  //         pathname: router.route,
-  //         query: {
-  //           im: false,
-  //         },
-  //       })
+  //     // toast(data?.message, {
+  //     //   duration: 40000,
+  //     //   style: {
+  //     //     border: '1px solid #15d64c',
+  //     //     color: '#15d64c',
+  //     //   },
+  //     // })
+  //     router.push({
+  //       pathname: router.route,
+  //       query: {
+  //         im: false,
+  //       },
   //     })
-  //     .catch((error) => {
-  //       setIsSubmitting(false)
-  //       console.log({ error })
-  //       // toast(error, {
-  //       //   duration: 40000,
-  //       //   style: {
-  //       //     border: '1px solid #d62515',
-  //       //     color: '#d62515',
-  //       //   },
-  //       // })
-  //     })
+  //   })
+  //   .catch((error) => {
+  //     setIsSubmitting(false)
+  //     console.log({ error })
+  //     // toast(error, {
+  //     //   duration: 40000,
+  //     //   style: {
+  //     //     border: '1px solid #d62515',
+  //     //     color: '#d62515',
+  //     //   },
+  //     // })
+  //   })
   // }
 
   useEffect(() => {
@@ -254,7 +254,7 @@ export default function ExportForm() {
           type="submit"
           className="mt-10 bg-primary hover:bg-[#7e46b3e0] text-white rounded-lg w-full py-4 2xl:py-5 shadow-lg"
         >
-          {isSubmitting ? 'Exporting...' : 'Export'}
+          Export
         </button>
       </form>
     </div>
