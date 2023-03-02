@@ -68,6 +68,8 @@ export default function ImportForm() {
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
+      {isSubmitting && <Loader isImporting />}
+
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Import MySQL Database
@@ -189,8 +191,6 @@ export default function ImportForm() {
           Import
         </button>
       </form>
-
-      {isSubmitting && <Loader isImporting />}
     </div>
   )
 }

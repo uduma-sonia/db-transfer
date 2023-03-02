@@ -29,6 +29,7 @@ export default function Loader({
           <p className="text-white text-xs">Exporting Database</p>
         </div>
       )}
+
       {isGeneratingCode && (
         <div className="bg-[#7e46b3] w-[200px] h-[150px] rounded-lg flex flex-col justify-center items-center gap-3">
           <GiCycle size="2.5rem" className="rotate" color="#ffffff" />

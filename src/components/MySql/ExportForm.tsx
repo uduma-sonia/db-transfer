@@ -53,7 +53,7 @@ export default function ExportForm() {
         .then((response) => response.json())
         .then(() => {
           setIsSubmitting(false)
-          toast.success('Databasr exported successfully')
+          toast.success('Database exported successfully')
           router.push({
             pathname: router.route,
             query: {
@@ -68,55 +68,6 @@ export default function ExportForm() {
     },
     [generatedId, router]
   )
-
-  // const tests = () => {
-  //   const output = {
-  //     id: '1677701230720',
-  //   }
-
-  // fetch('http://138.68.72.216:5500/process/mysql/1677701230720', {
-  //   // body: JSON.stringify(output),
-  //   method: 'GET',
-  //   mode: 'cors',
-  //   cache: 'no-cache',
-  //   credentials: 'same-origin',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   redirect: 'follow',
-  //   referrerPolicy: 'no-referrer',
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log(data)
-  //     setIsSubmitting(false)
-
-  //     // toast(data?.message, {
-  //     //   duration: 40000,
-  //     //   style: {
-  //     //     border: '1px solid #15d64c',
-  //     //     color: '#15d64c',
-  //     //   },
-  //     // })
-  //     router.push({
-  //       pathname: router.route,
-  //       query: {
-  //         im: false,
-  //       },
-  //     })
-  //   })
-  //   .catch((error) => {
-  //     setIsSubmitting(false)
-  //     console.log({ error })
-  //     // toast(error, {
-  //     //   duration: 40000,
-  //     //   style: {
-  //     //     border: '1px solid #d62515',
-  //     //     color: '#d62515',
-  //     //   },
-  //     // })
-  //   })
-  // }
 
   useEffect(() => {
     const genId = sessionStorage.getItem('mysql_id') as string
