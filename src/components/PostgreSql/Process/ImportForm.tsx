@@ -55,6 +55,7 @@ export default function ImportForm() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log('FIRST REQ', data)
         setIsSubmitting(false)
         setShowModal(true)
         toast.success(data?.message)
@@ -85,8 +86,9 @@ export default function ImportForm() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log('SECOND REQ', data)
+
         toast.success('Process complete')
-        console.log(data)
         setSolidityDetails(data)
         setIsGenerating(false)
         scrollToPage('syntax_display')
