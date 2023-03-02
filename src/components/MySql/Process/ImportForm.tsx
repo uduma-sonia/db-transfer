@@ -97,6 +97,7 @@ export default function ImportForm() {
       })
   }
 
+  // Scrolls to the generated code area
   const scrollTarget = (target: string) =>
     scroller.scrollTo(target, { smooth: true, duration: 700 })
 

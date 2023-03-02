@@ -5,7 +5,7 @@ import { convertToHtml } from '@/lib/htmlConverter'
 export default function SyntaxDisplay({ data }: any) {
   return (
     <div className="mt-16" id="syntax_display">
-      {data?.map((item: any) => {
+      {data?.result?.map((item: any) => {
         const text = item.choices[0].text as string
         const res = convertToHtml(text)
 
