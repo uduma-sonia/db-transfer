@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-// import { databaseApi } from '@/lib/api'
-import toast, { Toaster } from 'react-hot-toast'
+import { toast } from 'react-toastify'
+import Loader from '../Common/Loader'
 import { useRouter } from 'next/router'
 
 const schema = z.object({
@@ -37,7 +37,6 @@ export default function ExportForm() {
         ...data,
         id: generatedId,
       }
-      // 1677701230720
 
       fetch('http://138.68.72.216:5500/mysql-export', {
         body: JSON.stringify(output),
@@ -52,17 +51,9 @@ export default function ExportForm() {
         referrerPolicy: 'no-referrer',
       })
         .then((response) => response.json())
-        .then((data) => {
-          console.log(data)
+        .then(() => {
           setIsSubmitting(false)
-
-          toast(data?.message, {
-            duration: 40000,
-            style: {
-              border: '1px solid #15d64c',
-              color: '#15d64c',
-            },
-          })
+          toast.success('Databasr exported successfully')
           router.push({
             pathname: router.route,
             query: {
@@ -70,20 +61,62 @@ export default function ExportForm() {
             },
           })
         })
-        .catch((error) => {
+        .catch(() => {
           setIsSubmitting(false)
-          console.log({ error })
-          toast(error, {
-            duration: 40000,
-            style: {
-              border: '1px solid #d62515',
-              color: '#d62515',
-            },
-          })
+          toast.error('An error occured')
         })
     },
     [generatedId, router]
   )
+
+  // const tests = () => {
+  //   const output = {
+  //     id: '1677701230720',
+  //   }
+
+  //   fetch('http://138.68.72.216:5500/process/mysql/1677701230720', {
+  //     // body: JSON.stringify(output),
+  //     method: 'GET',
+  //     mode: 'cors',
+  //     cache: 'no-cache',
+  //     credentials: 'same-origin',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     redirect: 'follow',
+  //     referrerPolicy: 'no-referrer',
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data)
+  //       setIsSubmitting(false)
+
+  //       // toast(data?.message, {
+  //       //   duration: 40000,
+  //       //   style: {
+  //       //     border: '1px solid #15d64c',
+  //       //     color: '#15d64c',
+  //       //   },
+  //       // })
+  //       router.push({
+  //         pathname: router.route,
+  //         query: {
+  //           im: false,
+  //         },
+  //       })
+  //     })
+  //     .catch((error) => {
+  //       setIsSubmitting(false)
+  //       console.log({ error })
+  //       // toast(error, {
+  //       //   duration: 40000,
+  //       //   style: {
+  //       //     border: '1px solid #d62515',
+  //       //     color: '#d62515',
+  //       //   },
+  //       // })
+  //     })
+  // }
 
   useEffect(() => {
     const genId = sessionStorage.getItem('mysql_id') as string
@@ -102,7 +135,8 @@ export default function ExportForm() {
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      <Toaster />
+      {isSubmitting && <Loader isExporting />}
+
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Export to New MySQL Database

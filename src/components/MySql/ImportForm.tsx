@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-// import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+import Loader from '../Common/Loader'
 
 const schema = z.object({
   user: z.string().min(1),
@@ -36,7 +37,6 @@ export default function ImportForm() {
       ...data,
       id: timestamp.toString(),
     }
-
     fetch('http://138.68.72.216:5500/mysql-import', {
       body: JSON.stringify(output),
       method: 'POST',
@@ -52,14 +52,7 @@ export default function ImportForm() {
       .then((response) => response.json())
       .then((data) => {
         setIsSubmitting(false)
-        // toast('Process complete', {
-        //   duration: 40000,
-        //   position: 'top-right',
-        //   style: {
-        //     border: '1px solid #15d64c',
-        //     color: '#15d64c',
-        //   },
-        // })
+        toast.success(data?.message)
         router.push({
           pathname: router.route,
           query: {
@@ -67,21 +60,14 @@ export default function ImportForm() {
           },
         })
       })
-      .catch((error) => {
+      .catch(() => {
         setIsSubmitting(false)
-        // toast('An error occured', {
-        //   duration: 40000,
-        //   style: {
-        //     border: '1px solid #d62515',
-        //     color: '#d62515',
-        //   },
-        // })
+        toast.error('An error occured')
       })
   }
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      {/* <Toaster /> */}
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Import MySQL Database
@@ -203,6 +189,8 @@ export default function ImportForm() {
           {isSubmitting ? 'Importing...' : 'Import'}
         </button>
       </form>
+
+      {isSubmitting && <Loader isImporting />}
     </div>
   )
 }
