@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 // @ts-ignore
 import Prism from 'prismjs'
+import 'prismjs/components/prism-jsx'
 import 'prismjs/themes/prism-tomorrow.css'
 import 'prismjs/plugins/toolbar/prism-toolbar.min.css'
 import 'prismjs/plugins/toolbar/prism-toolbar.min'

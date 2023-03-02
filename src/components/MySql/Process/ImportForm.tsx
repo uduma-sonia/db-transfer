@@ -22,7 +22,7 @@ export default function ImportForm() {
   const [showModal, setShowModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
-  const [solidityDetails, setSolidityDetails] = useState([])
+  const [solidityDetails, setSolidityDetails] = useState<any>([])
 
   const {
     register,
