@@ -1,9 +1,9 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 
-const [Navbar, Hero, Databases, Footer] = [
+const [Navbar, ImportForm, Footer] = [
   dynamic(() => import('../Layout/Navbar')),
-  dynamic(() => import('@components/Home/Hero'), {
+  dynamic(() => import('@components/MySql/Process/ImportForm'), {
     loading: () => (
       <div className="w-screen h-screen flex justify-center items-center">
         <div
@@ -13,7 +13,7 @@ const [Navbar, Hero, Databases, Footer] = [
       </div>
     ),
   }),
-  dynamic(() => import('@components/Home/Databases'), {
+  dynamic(() => import('@containers/Layout/Footer'), {
     loading: () => (
       <div className="w-screen h-screen flex justify-center items-center">
         <div
@@ -23,15 +23,13 @@ const [Navbar, Hero, Databases, Footer] = [
       </div>
     ),
   }),
-  dynamic(() => import('../Layout/Footer')),
 ]
 
-export default function Home() {
+export default function MySqlView() {
   return (
     <div>
       <Navbar />
-      <Hero />
-      <Databases />
+      <ImportForm />
       <Footer />
     </div>
   )

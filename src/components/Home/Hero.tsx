@@ -5,8 +5,9 @@ import { useRouter } from 'next/router'
 export default function Hero() {
   const router = useRouter()
 
-  const scrollTarget = (target: string) =>
+  const scrollTarget = (target: string) => {
     scroller.scrollTo(target, { smooth: true, duration: 700 })
+  }
 
   const scrollToPage = async (target: string) => {
     if (router.pathname !== '/') {

@@ -28,7 +28,7 @@ export default function Databases() {
       image: '/images/mysql-logo.png',
       description:
         'Migrate your MySQL database to Web3, a solidity code will be generated for you.',
-      route: '/mysql',
+      route: '/mysql/w3',
     },
     {
       label: 'PostgreSQL',
@@ -59,7 +59,7 @@ export default function Databases() {
             return (
               <Link
                 key={item.label}
-                className="hover:bg-slate-200 group p-3 rounded-2xl"
+                className="hover:bg-slate-100 group p-3 rounded-2xl"
                 href={item.route}
                 passHref
               >
@@ -110,7 +110,7 @@ export default function Databases() {
             return (
               <Link
                 key={item.label}
-                className="hover:bg-slate-200 group p-3 rounded-2xl"
+                className="hover:bg-slate-100 group p-3 rounded-2xl"
                 href={item.route}
                 passHref
               >

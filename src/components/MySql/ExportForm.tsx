@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/api'
-import toast, { Toaster } from 'react-hot-toast'
+import { toast } from 'react-toastify'
+import Loader from '../Common/Loader'
 import { useRouter } from 'next/router'
 
 const schema = z.object({
@@ -31,38 +31,42 @@ export default function ExportForm() {
 
   const onSubmit = useCallback(
     async (data: ImportFormSchema) => {
-      try {
-        setIsSubmitting(true)
-        const output = {
-          ...data,
-          id: generatedId,
-        }
-        const result = await databaseApi.exportMySql(output)
+      setIsSubmitting(true)
 
-        if (result) {
-          toast('Import successful', {
-            duration: 40000,
-            style: {
-              border: '1px solid #15d64c',
-              color: '#15d64c',
+      const output = {
+        ...data,
+        id: generatedId,
+      }
+
+      fetch('http://138.68.72.216:5500/mysql-export', {
+        body: JSON.stringify(output),
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      })
+        .then((response) => response.json())
+        .then(() => {
+          setIsSubmitting(false)
+          toast.success('Database exported successfully')
+          router.push({
+            pathname: router.route,
+            query: {
+              im: false,
             },
           })
-          console.log(result)
-        }
-      } catch (error: any) {
-        console.log(error)
-        toast('Error', {
-          duration: 40000,
-          style: {
-            border: '1px solid #d62515',
-            color: '#d62515',
-          },
         })
-      } finally {
-        setIsSubmitting(false)
-      }
+        .catch(() => {
+          setIsSubmitting(false)
+          toast.error('An error occured')
+        })
     },
-    [generatedId]
+    [generatedId, router]
   )
 
   useEffect(() => {
@@ -82,7 +86,8 @@ export default function ExportForm() {
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      <Toaster />
+      {isSubmitting && <Loader isExporting />}
+
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Export to New MySQL Database
@@ -200,7 +205,7 @@ export default function ExportForm() {
           type="submit"
           className="mt-10 bg-primary hover:bg-[#7e46b3e0] text-white rounded-lg w-full py-4 2xl:py-5 shadow-lg"
         >
-          {isSubmitting ? 'Exporting...' : 'Export'}
+          Export
         </button>
       </form>
     </div>

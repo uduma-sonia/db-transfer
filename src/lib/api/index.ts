@@ -4,8 +4,13 @@ import databaseService from './database'
 const API_ENDPOINT = process.env.NEXT_PUBLIC_API_URL
 const isBrowser = typeof window !== undefined
 
+// console.log(API_ENDPOINT)
+
 export const api = axios.create({
   baseURL: API_ENDPOINT,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
 
 api.interceptors.response.use(
