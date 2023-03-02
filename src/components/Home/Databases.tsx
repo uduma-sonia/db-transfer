@@ -59,7 +59,7 @@ export default function Databases() {
             return (
               <Link
                 key={item.label}
-                className="hover:bg-slate-200 group p-3 rounded-2xl"
+                className="hover:bg-slate-100 group p-3 rounded-2xl"
                 href={item.route}
                 passHref
               >
@@ -110,7 +110,7 @@ export default function Databases() {
             return (
               <Link
                 key={item.label}
-                className="hover:bg-slate-200 group p-3 rounded-2xl"
+                className="hover:bg-slate-100 group p-3 rounded-2xl"
                 href={item.route}
                 passHref
               >
