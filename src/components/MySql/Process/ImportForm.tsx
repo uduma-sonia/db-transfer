@@ -44,13 +44,11 @@ export default function ImportForm() {
     fetch('https://www.trf.ink/mysql-import', {
       body: JSON.stringify(output),
       method: 'POST',
-      // mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      // redirect: 'follow',
       referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())
@@ -75,13 +73,11 @@ export default function ImportForm() {
 
     fetch(`https://www.trf.ink/process/mysql/${id}`, {
       method: 'GET',
-      // mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      // redirect: 'follow',
       referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())
