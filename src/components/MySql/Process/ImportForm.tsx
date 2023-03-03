@@ -5,7 +5,7 @@ import * as z from 'zod'
 import { toast } from 'react-toastify'
 import Loader from '../../Common/Loader'
 import { MdClear } from 'react-icons/md'
-import SyntaxDisplay from './SyntaxDisplay'
+import SyntaxDisplay from '../../Common/SyntaxDisplay'
 import { scroller } from 'react-scroll'
 
 const schema = z.object({

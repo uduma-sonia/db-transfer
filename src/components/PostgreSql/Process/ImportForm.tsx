@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-// import axios from 'axios'
-// import toast, { Toaster } from 'react-hot-toast'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/router'
-import Loader from '../Common/Loader'
+import Loader from '../../Common/Loader'
+import { MdClear } from 'react-icons/md'
+import SyntaxDisplay from '../../Common/SyntaxDisplay'
+import { scroller } from 'react-scroll'
 
 const schema = z.object({
   user: z.string().min(1),
@@ -19,8 +19,10 @@ const schema = z.object({
 type ImportFormSchema = z.infer<typeof schema>
 
 export default function ImportForm() {
-  const router = useRouter()
+  const [showModal, setShowModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [solidityDetails, setSolidityDetails] = useState<any>([])
 
   const {
     register,
@@ -32,8 +34,9 @@ export default function ImportForm() {
 
   const onSubmit = async (data: ImportFormSchema) => {
     setIsSubmitting(true)
+
     const timestamp = Date.now()
-    sessionStorage.setItem('psql_id', timestamp.toString())
+    sessionStorage.setItem('psql_w3_id', timestamp.toString())
     const output = {
       ...data,
       id: timestamp.toString(),
@@ -52,14 +55,10 @@ export default function ImportForm() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log('FIRST REQ', data)
         setIsSubmitting(false)
+        setShowModal(true)
         toast.success(data?.message)
-        router.push({
-          pathname: router.route,
-          query: {
-            im: true,
-          },
-        })
       })
       .catch(() => {
         setIsSubmitting(false)
@@ -67,66 +66,63 @@ export default function ImportForm() {
       })
   }
 
-  // const onSubmit = useCallback(
-  //   async (data: ImportFormSchema) => {
-  //     try {
-  //       setIsSubmitting(true)
+  const generateSolidityCode = () => {
+    setIsGenerating(true)
+    setIsSubmitting(false)
+    setShowModal(false)
 
-  //       const timestamp = Date.now()
-  //       sessionStorage.setItem('psql_id', timestamp.toString())
-  //       const output = {
-  //         ...data,
-  //         id: timestamp.toString(),
-  //       }
-  //       const res = await axios.post(
-  //         'http://138.68.72.216:5500/psql-import',
-  //         output
-  //       )
+    const id = sessionStorage.getItem('psql_w3_id') as string
 
-  //       if (res.status === 200) {
-  //         toast('Import successful', {
-  //           duration: 40000,
-  //           style: {
-  //             border: '1px solid #15d64c',
-  //             color: '#15d64c',
-  //           },
-  //         })
-  //         console.log(res.data)
-  //         router.push({
-  //           pathname: router.route,
-  //           query: {
-  //             im: true,
-  //           },
-  //         })
-  //       }
-  //     } catch (error: any) {
-  //       console.log(error)
-  //       toast('Error', {
-  //         duration: 40000,
-  //         style: {
-  //           border: '1px solid #d62515',
-  //           color: '#d62515',
-  //         },
-  //       })
-  //     } finally {
-  //       setIsSubmitting(false)
-  //     }
-  //   },
-  //   [router]
-  // )
+    fetch(`http://138.68.72.216:5500/process/psql/${id}`, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('SECOND REQ', data)
+
+        toast.success('Process complete')
+        setSolidityDetails(data)
+        setIsGenerating(false)
+        scrollToPage('syntax_display')
+      })
+      .catch(() => {
+        setIsGenerating(false)
+        toast.error('An error occured')
+      })
+  }
+
+  // Scrolls to the generated code area
+  const scrollTarget = (target: string) =>
+    scroller.scrollTo(target, { smooth: true, duration: 700 })
+
+  const scrollToPage = async (target: string) => {
+    scrollTarget(target)
+  }
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      {/* <Toaster /> */}
       {isSubmitting && <Loader isImporting />}
+      {isGenerating && <Loader isGeneratingCode />}
+      <GenerateSolidityCodeModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        generateSolidityCode={generateSolidityCode}
+      />
 
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
           Import PostgreSQL Database
         </h2>
         <p className="text-sm text-dark mt-2">
-          Import an existing PostreSQL database and transfer it to a new
-          database by filling out the form below with the old database details.
+          Import existing PostgreSQL database and generate Solidity Code.
         </p>
 
         <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">
@@ -152,7 +148,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="user"
-            placeholder="User"
+            placeholder="root"
             type="text"
             {...register('user')}
           />
@@ -171,7 +167,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="hostname"
-            placeholder="Hostname"
+            placeholder="localhost"
             type="text"
             {...register('hostname')}
           />
@@ -190,7 +186,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="port"
-            placeholder="Port"
+            placeholder="port"
             type="text"
             {...register('port')}
           />
@@ -209,7 +205,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="database"
-            placeholder="Database"
+            placeholder="database name"
             type="text"
             {...register('database')}
           />
@@ -241,6 +237,50 @@ export default function ImportForm() {
           Import
         </button>
       </form>
+      {solidityDetails && <SyntaxDisplay data={solidityDetails} />}
+    </div>
+  )
+}
+
+const GenerateSolidityCodeModal = ({
+  showModal = false,
+  setShowModal,
+  generateSolidityCode,
+}: {
+  showModal?: boolean
+  setShowModal: any
+  generateSolidityCode: () => void
+}) => {
+  return (
+    <div
+      className={`fixed w-full h-full left-0 top-0 bg-[#e9d5ff8f] ${
+        showModal ? 'flex' : 'hidden'
+      } justify-center items-center`}
+    >
+      <div className="bg-[#7e46b3] w-[250px] py-7 rounded-lg flex justify-center items-center relative">
+        <button
+          className="absolute top-2 right-3"
+          onClick={() => setShowModal(false)}
+        >
+          <MdClear color="white" size="1rem" />
+        </button>
+
+        <div className="w-full px-3 h-full text-center">
+          <p className="text-white font-medium text-lg">Import complete</p>
+          <p className="text-white text-sm font-medium mt-3">
+            Generate solidity code
+          </p>
+          <div className="mt-10">
+            <button
+              type="button"
+              className="bg-white text-black rounded-lg w-full py-3 text-sm font-semibold"
+              onClick={generateSolidityCode}
+            >
+              Generate
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
