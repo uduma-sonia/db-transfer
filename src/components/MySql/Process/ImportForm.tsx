@@ -41,16 +41,16 @@ export default function ImportForm() {
       ...data,
       id: timestamp.toString(),
     }
-    fetch('http://138.68.72.216:5500/mysql-import', {
+    fetch('https://www.trf.ink/mysql-import', {
       body: JSON.stringify(output),
       method: 'POST',
-      mode: 'cors',
+      // mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      redirect: 'follow',
+      // redirect: 'follow',
       referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())
@@ -73,15 +73,15 @@ export default function ImportForm() {
 
     const id = sessionStorage.getItem('mysql_w3_id') as string
 
-    fetch(`http://138.68.72.216:5500/process/mysql/${id}`, {
+    fetch(`https://www.trf.ink/process/mysql/${id}`, {
       method: 'GET',
-      mode: 'cors',
+      // mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      redirect: 'follow',
+      // redirect: 'follow',
       referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())

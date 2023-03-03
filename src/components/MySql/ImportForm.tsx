@@ -37,7 +37,7 @@ export default function ImportForm() {
       ...data,
       id: timestamp.toString(),
     }
-    fetch('http://138.68.72.216:5500/mysql-import', {
+    fetch('https://www.trf.ink/mysql-import', {
       body: JSON.stringify(output),
       method: 'POST',
       mode: 'cors',

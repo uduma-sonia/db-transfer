@@ -38,7 +38,7 @@ export default function ExportForm() {
         id: generatedId,
       }
 
-      fetch('http://138.68.72.216:5500/mysql-export', {
+      fetch('https://www.trf.ink/mysql-export', {
         body: JSON.stringify(output),
         method: 'POST',
         mode: 'cors',
