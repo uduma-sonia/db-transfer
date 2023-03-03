@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { databaseApi } from '@/lib/api'
-import toast, { Toaster } from 'react-hot-toast'
+// import axios from 'axios'
+// import toast, { Toaster } from 'react-hot-toast'
+import Loader from '../Common/Loader'
+import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 
 const schema = z.object({
@@ -29,40 +31,98 @@ export default function ExportForm() {
     resolver: zodResolver(schema),
   })
 
+  // const onSubmit = useCallback(
+  //   async (data: ImportFormSchema) => {
+  //     try {
+  //       setIsSubmitting(true)
+  //       const output = {
+  //         ...data,
+  //         id: generatedId,
+  //       }
+  //       const res = await axios.post(
+  //         'http://138.68.72.216:5500/psql-export',
+  //         output
+  //       )
+
+  //       if (res.status === 200) {
+  //         toast('Export successful', {
+  //           duration: 40000,
+  //           style: {
+  //             border: '1px solid #15d64c',
+  //             color: '#15d64c',
+  //           },
+  //         })
+  //         console.log(res.data)
+  //       }
+  //     } catch (error: any) {
+  //       console.log(error)
+  //       toast('Error', {
+  //         duration: 40000,
+  //         style: {
+  //           border: '1px solid #d62515',
+  //           color: '#d62515',
+  //         },
+  //       })
+  //     } finally {
+  //       setIsSubmitting(false)
+  //     }
+  //   },
+  //   [generatedId]
+  // )
+
+  // useEffect(() => {
+  //   const genId = sessionStorage.getItem('psql_id') as string
+  //   if (genId) {
+  //     setGeneratedId(genId)
+  //   } else if (genId === null) {
+  //     router.push({
+  //       pathname: router.route,
+  //       query: {
+  //         im: false,
+  //       },
+  //     })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
+
   const onSubmit = useCallback(
     async (data: ImportFormSchema) => {
-      try {
-        setIsSubmitting(true)
-        const output = {
-          ...data,
-          id: generatedId,
-        }
-        const result = await databaseApi.exportPSql(output)
+      setIsSubmitting(true)
 
-        if (result) {
-          toast('Export successful', {
-            duration: 40000,
-            style: {
-              border: '1px solid #15d64c',
-              color: '#15d64c',
+      const output = {
+        ...data,
+        id: generatedId,
+      }
+
+      fetch('http://138.68.72.216:5500/psql-export', {
+        body: JSON.stringify(output),
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      })
+        .then((response) => response.json())
+        .then(() => {
+          setIsSubmitting(false)
+          toast.success('Database exported successfully')
+          router.push({
+            pathname: router.route,
+            query: {
+              im: false,
             },
           })
-          console.log(result)
-        }
-      } catch (error: any) {
-        console.log(error)
-        toast('Error', {
-          duration: 40000,
-          style: {
-            border: '1px solid #d62515',
-            color: '#d62515',
-          },
         })
-      } finally {
-        setIsSubmitting(false)
-      }
+        .catch(() => {
+          setIsSubmitting(false)
+          toast.error('An error occured')
+        })
     },
-    [generatedId]
+    [generatedId, router]
   )
 
   useEffect(() => {
@@ -82,17 +142,18 @@ export default function ExportForm() {
 
   return (
     <div className="max-w-[1300px] mx-auto px-5 md:px-12 xl:px-20">
-      <Toaster />
+      {/* <Toaster /> */}
+      {isSubmitting && <Loader isExporting />}
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
-          Export to a New PosgreSQL Database
+          Export to a New PostgreSQL Database
         </h2>
         <p className="text-sm text-dark mt-2">
           Fill in the details of your new to complete the transfer.
         </p>
 
         <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">
-          <p>postgres://User:Password@Hostname:Port/DatabaseName</p>
+          <p>postgres://User:Password@Hostname:Port/Database</p>
         </div>
       </div>
 
@@ -163,7 +224,7 @@ export default function ExportForm() {
             className="text-sm text-dark font-medium mb-2 pl-2"
             htmlFor="_database"
           >
-            Database
+            Database Name
             {errors && errors?.database && (
               <span className="text-red-500 text-[10px]"> *</span>
             )}
@@ -171,7 +232,7 @@ export default function ExportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="_database"
-            placeholder="DatabaseName"
+            placeholder="Database"
             type="text"
             {...register('database')}
           />
@@ -200,7 +261,7 @@ export default function ExportForm() {
           type="submit"
           className="mt-10 bg-primary hover:bg-[#7e46b3e0] text-white rounded-lg w-full py-4 2xl:py-5 shadow-lg"
         >
-          {isSubmitting ? 'Exporting...' : 'Export'}
+          Export
         </button>
       </form>
     </div>

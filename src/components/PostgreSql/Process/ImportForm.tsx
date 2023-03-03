@@ -36,21 +36,21 @@ export default function ImportForm() {
     setIsSubmitting(true)
 
     const timestamp = Date.now()
-    sessionStorage.setItem('mysql_w3_id', timestamp.toString())
+    sessionStorage.setItem('psql_w3_id', timestamp.toString())
     const output = {
       ...data,
       id: timestamp.toString(),
     }
-    fetch('https://www.trf.ink/mysql-import', {
+    fetch('http://138.68.72.216:5500/psql-import', {
       body: JSON.stringify(output),
       method: 'POST',
-      // mode: 'cors',
+      mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      // redirect: 'follow',
+      redirect: 'follow',
       referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())
@@ -71,17 +71,17 @@ export default function ImportForm() {
     setIsSubmitting(false)
     setShowModal(false)
 
-    const id = sessionStorage.getItem('mysql_w3_id') as string
+    const id = sessionStorage.getItem('psql_w3_id') as string
 
-    fetch(`https://www.trf.ink/process/mysql/${id}`, {
+    fetch(`http://138.68.72.216:5500/process/psql/${id}`, {
       method: 'GET',
-      // mode: 'cors',
+      mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
       },
-      // redirect: 'follow',
+      redirect: 'follow',
       referrerPolicy: 'no-referrer',
     })
       .then((response) => response.json())
@@ -119,14 +119,14 @@ export default function ImportForm() {
 
       <div className="mt-10 max-w-[600px] mx-auto text-center">
         <h2 className="text-dark text-xl font-semibold">
-          Import MySQL Database
+          Import PostgreSQL Database
         </h2>
         <p className="text-sm text-dark mt-2">
-          Import existing MySQL database and generate Solidity Code.
+          Import existing PostgreSQL database and generate Solidity Code.
         </p>
 
         <div className="mt-10 text-gray-600 inline-block text-xs bg-gray-100 border border-gray-300 px-3 py-2 rounded-lg">
-          <p>mysql://root:password@localhost:port/databasename</p>
+          <p>postgres://User:Password@Hostname:Port/Database</p>
         </div>
       </div>
 
@@ -197,7 +197,7 @@ export default function ImportForm() {
             className="text-sm text-dark font-medium mb-2 pl-2"
             htmlFor="database"
           >
-            Database
+            Database Name
             {errors && errors?.database && (
               <span className="text-red-500 text-[10px]"> *</span>
             )}
@@ -224,7 +224,7 @@ export default function ImportForm() {
           <input
             className="border border-slate-400 h-[45px] bg-transparent rounded-lg text-sm px-4 outline-none"
             id="password"
-            placeholder="* * * * * * *"
+            placeholder="Password"
             type="password"
             {...register('password')}
           />

@@ -1,6 +1,6 @@
 import React from 'react'
-import SyntaxHighlighter from '@/components/Common/SyntaxHighlighter'
-import { convertToHtml } from '@/lib/htmlConverter'
+import SyntaxHighlighter from './SyntaxHighlighter'
+import { convertToHtml } from '@lib/htmlConverter'
 
 export default function SyntaxDisplay({ data }: any) {
   return (
