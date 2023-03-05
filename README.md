@@ -1,0 +1,1 @@
+TRF is a database service , which helps perform data transfer across databases but with the help of AI,  tables in these databases can be used to generate solidity codes for CRUD (Create, Read, Update and Delete) implementation on the blockchain. A service to help cut down time for development process.
